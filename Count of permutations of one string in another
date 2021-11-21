@@ -1,0 +1,87 @@
+class Solution {
+   
+         private int solve(string A, string B)
+         {
+            int startIndex = 0;
+            int endIndex = B.Length - 1;
+            Dictionary<char, int> BDict = new Dictionary<char, int>();
+
+            for (int i = 0; i < B.Length; i++)
+            {
+                if (BDict.ContainsKey(B[i]))
+                {
+                    BDict[B[i]]++;
+                }
+                else
+                {
+                    BDict.Add(B[i], 1);
+                }
+            }
+
+            Dictionary<char, int> ADict = new Dictionary<char, int>();
+
+            for (int i = 0; i < B.Length; i++)
+            {
+                if (ADict.ContainsKey(A[i]))
+                {
+                    ADict[A[i]]++;
+                }
+                else
+                {
+                    ADict.Add(A[i], 1);
+                }
+            }
+            int op = 0;
+            while(endIndex<A.Length)
+            {
+                bool incCount = true;
+                foreach(var b in BDict)
+                {
+                    if (ADict.ContainsKey(b.Key) && ADict[b.Key] == BDict[b.Key])
+                    {
+                      continue;
+                    }
+                    else
+                    {
+                        ADict[A[startIndex]]--;
+                        if(ADict[A[startIndex]]==0)
+                        {
+                            ADict.Remove(A[startIndex]);
+                        }
+                        startIndex++;
+                        endIndex++;
+                        if (endIndex < A.Length)
+                        {
+                            if (ADict.ContainsKey(A[endIndex]))
+                                ADict[A[endIndex]]++;
+                            else
+                                ADict.Add(A[endIndex], 1);
+                        }
+                        incCount = false;
+                        break;
+                    }
+                }
+
+                if (incCount)
+                {
+                    op++;
+
+                    ADict[A[startIndex]]--;
+                    if (ADict[A[startIndex]] == 0)
+                    {
+                        ADict.Remove(A[startIndex]);
+                    }
+                    startIndex++;
+                    endIndex++;
+                    if (endIndex < A.Length)
+                    {
+                        if (ADict.ContainsKey(A[endIndex]))
+                            ADict[A[endIndex]]++;
+                        else
+                            ADict.Add(A[endIndex], 1);
+                    }
+                }
+            }
+            return op;
+        }
+       }
